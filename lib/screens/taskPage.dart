@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TaskPage extends StatefulWidget {
-  TaskPage({Key? key}) : super(key: key);
+ 
 
   @override
   _TaskPageState createState() => _TaskPageState();

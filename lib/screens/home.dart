@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:todo/backend/getData.dart';
+import 'package:todo/backend/dataClass.dart';
 import 'package:todo/screens/taskPage.dart';
 
 class Home extends StatefulWidget {
@@ -9,14 +9,16 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-GetDataClass dbClass = new GetDataClass();
-List data = [];
+DataClass dbClass = new DataClass();
+dynamic data = [];
+List<dynamic> list = [];
 
 class _HomeState extends State<Home> {
   Future _getData() async {
     Future.delayed(Duration(seconds: 2));
     final res = await dbClass.getFromDb();
-    data = res;
+    data = list = res;
+    print(list.length);
   }
 
   @override
@@ -39,24 +41,24 @@ class _HomeState extends State<Home> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Container(
               child: ListView.builder(
-                itemCount: data.length,
+                itemCount: list.length,
                 itemBuilder: (context, item) {
                   return Container(
                       color: Colors.cyan,
                       height: 500,
                       child: Material(
                         child: InkWell(
-                          onTap: () {
-                            print('tap');
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return TaskPage();
-                            }));
-                          },
-                          splashColor: Colors.orange,
-                          focusColor: Colors.green,
-                          child: Text(data[item].toString()),
-                        ),
+                            onTap: () {
+                              print('tap');
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return TaskPage();
+                              }));
+                            },
+                            splashColor: Colors.orange,
+                            focusColor: Colors.green,
+                            child: Text(
+                                data[0]['taskArray']['task'][item].toString())),
                       ));
                 },
               ),

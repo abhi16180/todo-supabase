@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
+import 'package:todo/screens/register.dart';
 import 'screens/home.dart';
 
-const supabaseUrl = 'https://bihcfbjfnraqriqnpefm.supabase.co';
+const supabaseUrl = 'https://dppejzdqiuogmpucjqrs.supabase.co';
 const supabaseKey =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyNzc5NzQ4NCwiZXhwIjoxOTQzMzczNDg0fQ.Qtoh3Z2N1JTCvr1mviI1dNfpldS7boJ0r3tJT5gGBHc';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyNzIzMTc4OSwiZXhwIjoxOTQyODA3Nzg5fQ.-HTXFHBsFzxhFwyNREbTBhoHkvbAvdjOE3_6NPDt7Ho';
 
 void main() async {
   Get.put<SupabaseClient>(SupabaseClient(supabaseUrl, supabaseKey));
