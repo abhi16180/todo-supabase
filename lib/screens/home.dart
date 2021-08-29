@@ -17,8 +17,8 @@ class _HomeState extends State<Home> {
   Future _getData() async {
     Future.delayed(Duration(seconds: 2));
     final res = await dbClass.getFromDb();
-    data = list = res;
-    print(list.length);
+    data = res[0]['taskArray']['tasks'];
+    print(data);
   }
 
   @override
@@ -41,25 +41,28 @@ class _HomeState extends State<Home> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Container(
               child: ListView.builder(
-                itemCount: list.length,
+                itemCount: data.length,
                 itemBuilder: (context, item) {
                   return Container(
-                      color: Colors.cyan,
-                      height: 500,
-                      child: Material(
-                        child: InkWell(
-                            onTap: () {
-                              print('tap');
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return TaskPage();
-                              }));
-                            },
-                            splashColor: Colors.orange,
-                            focusColor: Colors.green,
-                            child: Text(
-                                data[0]['taskArray']['task'][item].toString())),
-                      ));
+                    color: Colors.cyan,
+                    height: 500,
+                    child: Material(
+                      child: InkWell(
+                        onTap: () {
+                          print('tap');
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return TaskPage();
+                          }));
+                        },
+                        splashColor: Colors.orange,
+                        focusColor: Colors.green,
+                        child: Text(
+                          data[item].toString(),
+                        ),
+                      ),
+                    ),
+                  );
                 },
               ),
             );

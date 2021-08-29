@@ -7,19 +7,16 @@ class DataClass {
   final client = Get.find<SupabaseClient>();
 
   Future addToDb(String heading, String description) async {
-    /*final _resp = await client.from('todo').insert({
-      "taskArray": {
-        "task": [
-          {"heading": title, "description": task},
-          {"heading": title, "description": task}
-        ]
-      }
-    }).execute();
-     print(_resp.data);
-    return _resp.data; */
-    final existingTasks =
-        await client.from('todo').select('taskArray').eq('id', 5).execute();
-    var data = ((existingTasks.data as List<dynamic>)[0]['taskArray']['task']);
+    var uid = client.auth.currentUser!.id;
+    final existingTasks = await client
+        .from('todo')
+        .select('taskArray')
+        .match({'uid': uid}).execute();
+    List data = [];
+    if ((existingTasks.data[0]['taskArray']) != null) {
+      data = (existingTasks.data[0]['taskArray'])['tasks'];
+    }
+
     //append new task
     data.add({
       "heading": heading,
@@ -28,19 +25,18 @@ class DataClass {
 
     final res = await client.from('todo').update({
       "taskArray": {
-        "task": data,
+        "tasks": data,
       }
-    }).match({"id": 2}).execute();
+    }).match({"uid": uid}).execute();
     return res.data;
   }
 
   Future getFromDb() async {
+    var uid = client.auth.currentUser!.id;
     final resp = await client
         .from('todo')
         .select('taskArray')
-        .match({'id': 2}).execute();
-    print(resp.data);
-
+        .match({'uid': uid}).execute();
     return resp.data;
   }
 

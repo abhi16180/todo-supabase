@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo/backend/authClass.dart';
 
+import 'home.dart';
+
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -8,6 +10,9 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   AuthClass _authClass = new AuthClass();
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,6 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                controller: _emailController,
                                 decoration: InputDecoration(
                                   labelText: 'Email',
                                 ),
@@ -47,6 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                controller: _passwordController,
                                 decoration: InputDecoration(
                                   labelText: 'password',
                                 ),
@@ -76,9 +83,23 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: MaterialButton(
                     child: Text('Register'),
                     onPressed: () async {
-                      await _authClass.register(
-                          'hegdeabhilash19@gmail.com', 'password', 'username');
-                      print('registered');
+                      final authResp = await _authClass.register(
+                          _emailController.text,
+                          _passwordController.text,
+                          'username');
+
+                      if (authResp != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return Home();
+                            },
+                          ),
+                        );
+                      } else {
+                        print('error while registering');
+                      }
                     },
                   ),
                 ),
