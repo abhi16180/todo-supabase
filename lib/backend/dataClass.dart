@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 class DataClass {
   final client = Get.find<SupabaseClient>();
   final box = Get.find<GetStorage>();
+  //add data to database
   Future addToDb(String heading, String description) async {
     var uid = box.read('uid');
     final existingTasks = await client
@@ -31,6 +32,8 @@ class DataClass {
     return res.data;
   }
 
+  //fetch data from database
+
   Future getFromDb() async {
     var uid = box.read('uid');
     final resp = await client
@@ -39,6 +42,8 @@ class DataClass {
         .match({'uid': uid}).execute();
     return resp.data;
   }
+
+//delete data from database
 
   Future deleteData(data, item) async {
     var uid = box.read('uid');

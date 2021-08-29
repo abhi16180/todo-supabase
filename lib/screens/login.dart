@@ -2,25 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:todo/backend/authClass.dart';
 
 import 'home.dart';
-import 'login.dart';
 
-class RegisterPage extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _LoginState createState() => _LoginState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  AuthClass _authClass = new AuthClass();
+class _LoginState extends State<Login> {
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
-  TextEditingController _usernameController = new TextEditingController();
-
+  AuthClass _authClass = new AuthClass();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Register Page'),
+          title: Text('Login Page'),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -39,15 +36,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           children: [
                             SizedBox(
                               height: 50,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                controller: _usernameController,
-                                decoration: InputDecoration(
-                                  labelText: 'username',
-                                ),
-                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -90,41 +78,29 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MaterialButton(
-                      child: Text('Register'),
-                      onPressed: () async {
-                        final authResp = await _authClass.register(
-                            _emailController.text,
-                            _passwordController.text,
-                            'username');
+                Center(
+                  child: MaterialButton(
+                    child: Text('Login'),
+                    onPressed: () async {
+                      final authResp = await _authClass.login(
+                        _emailController.text,
+                        _passwordController.text,
+                      );
 
-                        if (authResp != null) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return Home();
-                              },
-                            ),
-                          );
-                        } else {
-                          print('error while registering');
-                        }
-                      },
-                    ),
-                    MaterialButton(
-                      child: Text('Login'),
-                      onPressed: () async {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return Login();
-                        }));
-                      },
-                    ),
-                  ],
+                      if (authResp != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return Home();
+                            },
+                          ),
+                        );
+                      } else {
+                        print('error while logging in');
+                      }
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 100,

@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:todo/backend/authClass.dart';
 import 'package:todo/backend/dataClass.dart';
 import 'package:todo/screens/taskPage.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import 'login.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -33,10 +36,33 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     TextEditingController titleTextController = new TextEditingController();
     TextEditingController taskTextController = new TextEditingController();
+    AuthClass _authClass = new AuthClass();
     return Scaffold(
       appBar: AppBar(
         title: Text('This is title'),
       ),
+      drawer: Drawer(
+          child: Column(
+        children: [
+          ListTile(
+            title: Text('Log-Out'),
+            onTap: () async {
+              final resp = await _authClass.logout();
+              if (resp != null)
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return Login();
+                }));
+              else
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error signing out'),
+                  ),
+                );
+            },
+          )
+        ],
+      )),
       body: FutureBuilder(
         future: _getData(),
         builder: (context, snapshot) {
