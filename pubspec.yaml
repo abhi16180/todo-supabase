@@ -31,7 +31,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  flutter_slidable: ^0.6.0
+ 
 
 dev_dependencies:
   flutter_test:
@@ -79,5 +79,14 @@ flutter:
     - family: questrial
       fonts:
         - asset: assets/fonts/Questrial-Regular.ttf
+    - family: cosmos
+      fonts:
+        - asset: assets/fonts/Cosmos-Light.ttf
+    - family: prodsans
+      fonts:
+        - asset: assets/fonts/ProductSans-Regular.woff
+    - family: ubuntu
+      fonts:
+        - asset: assets/fonts/Ubuntu-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

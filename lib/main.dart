@@ -15,6 +15,7 @@ void main() async {
   Get.put<GetStorage>(GetStorage());
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: App(),
       theme: ThemeData(brightness: Brightness.dark, fontFamily: 'questrial'),
     ),

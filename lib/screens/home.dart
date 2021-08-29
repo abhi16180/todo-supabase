@@ -5,9 +5,6 @@ import 'package:todo/backend/authClass.dart';
 import 'package:todo/backend/dataClass.dart';
 import 'package:todo/screens/register.dart';
 import 'package:todo/screens/taskPage.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-
-import 'login.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -38,9 +35,10 @@ class _HomeState extends State<Home> {
     TextEditingController titleTextController = new TextEditingController();
     TextEditingController taskTextController = new TextEditingController();
     AuthClass _authClass = new AuthClass();
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('This is title'),
+        title: Text('TODO'),
       ),
       drawer: Drawer(
           child: Column(
@@ -88,7 +86,7 @@ class _HomeState extends State<Home> {
                         height: 100,
                         decoration: BoxDecoration(
                             gradient: LinearGradient(colors: [
-                          Colors.pink.withAlpha(100),
+                          Colors.orange.shade800.withAlpha(200),
                           Colors.purple.withAlpha(200),
                         ])),
                         child: InkWell(
@@ -103,9 +101,12 @@ class _HomeState extends State<Home> {
                           },
                           splashColor: Colors.orange,
                           focusColor: Colors.green,
-                          child: Center(
-                            child: Text(
-                              data[revIndex]['heading'].toString(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                data[revIndex]['heading'].toString(),
+                              ),
                             ),
                           ),
                         ),
@@ -115,6 +116,14 @@ class _HomeState extends State<Home> {
                 },
               ),
             );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: MaterialButton(
+                  child: Text('Error/Click to refresh'),
+                  onPressed: () {
+                    setState(() {});
+                  }),
+            );
           } else {
             return Center(
               child: CircularProgressIndicator(),
@@ -123,19 +132,32 @@ class _HomeState extends State<Home> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurpleAccent,
         onPressed: () {
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  content: Form(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  content: Container(
+                    height: 300,
+                    width: width / 2,
                     child: Column(
                       children: [
                         TextField(
                           controller: titleTextController,
+                          decoration: InputDecoration(
+                            labelText: 'Title',
+                          ),
                         ),
                         TextField(
                           controller: taskTextController,
+                          decoration: InputDecoration(
+                            labelText: 'Description',
+                          ),
                         )
                       ],
                     ),
