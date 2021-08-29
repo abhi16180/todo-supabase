@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:todo/backend/dataClass.dart';
 import 'package:todo/screens/taskPage.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,13 +13,14 @@ class Home extends StatefulWidget {
 DataClass dbClass = new DataClass();
 dynamic data = [];
 List<dynamic> list = [];
+var len;
 
 class _HomeState extends State<Home> {
   Future _getData() async {
     Future.delayed(Duration(seconds: 2));
     final res = await dbClass.getFromDb();
     data = res[0]['taskArray']['tasks'];
-    print(data);
+    len = data.length;
   }
 
   @override
@@ -41,24 +43,30 @@ class _HomeState extends State<Home> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Container(
               child: ListView.builder(
-                itemCount: data.length,
+                itemCount: len,
                 itemBuilder: (context, item) {
-                  return Container(
-                    color: Colors.cyan,
-                    height: 500,
-                    child: Material(
-                      child: InkWell(
-                        onTap: () {
-                          print('tap');
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return TaskPage();
-                          }));
-                        },
-                        splashColor: Colors.orange,
-                        focusColor: Colors.green,
-                        child: Text(
-                          data[item].toString(),
+                  return Dismissible(
+                    key: UniqueKey(),
+                    onDismissed: (direction) async {
+                      await dbClass.deleteData(data, item);
+                      setState(() {});
+                    },
+                    child: Container(
+                      color: Colors.cyan,
+                      height: 500,
+                      child: Material(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return TaskPage();
+                            }));
+                          },
+                          splashColor: Colors.orange,
+                          focusColor: Colors.green,
+                          child: Text(
+                            data[item].toString(),
+                          ),
                         ),
                       ),
                     ),

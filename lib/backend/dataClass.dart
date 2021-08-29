@@ -1,13 +1,13 @@
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:supabase/supabase.dart';
 import 'package:get/get.dart';
-import 'dart:convert' as convert;
 
 class DataClass {
   final client = Get.find<SupabaseClient>();
-
+  final box = Get.find<GetStorage>();
   Future addToDb(String heading, String description) async {
-    var uid = client.auth.currentUser!.id;
+    var uid = box.read('uid');
     final existingTasks = await client
         .from('todo')
         .select('taskArray')
@@ -32,7 +32,7 @@ class DataClass {
   }
 
   Future getFromDb() async {
-    var uid = client.auth.currentUser!.id;
+    var uid = box.read('uid');
     final resp = await client
         .from('todo')
         .select('taskArray')
@@ -40,8 +40,13 @@ class DataClass {
     return resp.data;
   }
 
-  Future deleteData(title) async {
-    final resp =
-        await client.from('todo').delete().eq('title', title).execute();
+  Future deleteData(data, item) async {
+    var uid = box.read('uid');
+    data.removeAt(item);
+    await client.from('todo').update({
+      "taskArray": {
+        "tasks": data,
+      }
+    }).match({'uid': uid}).execute();
   }
 }

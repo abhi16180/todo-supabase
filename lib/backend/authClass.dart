@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:supabase/supabase.dart';
 
 import '../main.dart';
@@ -13,9 +14,11 @@ class AuthClass {
       'uid': uid,
       "taskArray": {"tasks": []}
     }).execute();
-
-    print(email);
-    print(password);
+    if (registerResp.data != null) {
+      var box = Get.find<GetStorage>();
+      box.write('uid', uid);
+      box.write('loggedin', true);
+    }
     return registerResp.data;
   }
 }
