@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/backend/authClass.dart';
+import 'package:todo/screens/register.dart';
 
 import 'home.dart';
 
@@ -61,14 +62,6 @@ class _LoginState extends State<Login> {
                             SizedBox(
                               height: 50,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Retype password',
-                                ),
-                              ),
-                            ),
                             SizedBox(
                               height: 100,
                             ),
@@ -78,29 +71,37 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                Center(
-                  child: MaterialButton(
-                    child: Text('Login'),
-                    onPressed: () async {
-                      final authResp = await _authClass.login(
-                        _emailController.text,
-                        _passwordController.text,
-                      );
-
-                      if (authResp != null) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return Home();
-                            },
-                          ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MaterialButton(
+                      child: Text('Login'),
+                      onPressed: () async {
+                        final authResp = await _authClass.login(
+                          _emailController.text,
+                          _passwordController.text,
                         );
-                      } else {
-                        print('error while logging in');
-                      }
-                    },
-                  ),
+
+                        if (authResp != null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Home();
+                              },
+                            ),
+                          );
+                        } else {
+                          print('error while logging in');
+                        }
+                      },
+                    ),
+                    MaterialButton(
+                        child: Text('Register Page'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
+                  ],
                 ),
                 SizedBox(
                   height: 100,

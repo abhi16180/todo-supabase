@@ -16,6 +16,7 @@ void main() async {
   runApp(
     MaterialApp(
       home: App(),
+      theme: ThemeData(brightness: Brightness.dark, fontFamily: 'questrial'),
     ),
   );
 }

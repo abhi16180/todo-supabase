@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:todo/backend/authClass.dart';
 import 'package:todo/backend/dataClass.dart';
+import 'package:todo/screens/register.dart';
 import 'package:todo/screens/taskPage.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -51,7 +52,7 @@ class _HomeState extends State<Home> {
               if (resp != null)
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return Login();
+                  return RegisterPage();
                 }));
               else
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -71,27 +72,41 @@ class _HomeState extends State<Home> {
               child: ListView.builder(
                 itemCount: len,
                 itemBuilder: (context, item) {
+                  var revIndex = data.length - (item + 1);
                   return Dismissible(
                     key: UniqueKey(),
                     onDismissed: (direction) async {
-                      await dbClass.deleteData(data, item);
+                      await dbClass.deleteData(data, revIndex);
                       setState(() {});
                     },
-                    child: Container(
-                      color: Colors.cyan,
-                      height: 500,
-                      child: Material(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                          Colors.pink.withAlpha(100),
+                          Colors.purple.withAlpha(200),
+                        ])),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return TaskPage();
+                              return TaskPage(
+                                heading: data[revIndex]['heading'],
+                                description: data[revIndex]['description'],
+                              );
                             }));
                           },
                           splashColor: Colors.orange,
                           focusColor: Colors.green,
-                          child: Text(
-                            data[item].toString(),
+                          child: Center(
+                            child: Text(
+                              data[revIndex]['heading'].toString(),
+                            ),
                           ),
                         ),
                       ),

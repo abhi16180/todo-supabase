@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TaskPage extends StatefulWidget {
- 
+  final heading;
+  final description;
+  TaskPage({this.heading, this.description});
 
   @override
   _TaskPageState createState() => _TaskPageState();
@@ -19,15 +21,15 @@ class _TaskPageState extends State<TaskPage> {
             child: Column(
           children: [
             Text(
-              'title',
+              widget.heading,
               style: TextStyle(fontSize: 40),
             ),
             SizedBox(
               height: 40,
             ),
             Text(
-              'task',
-              style: TextStyle(fontSize: 40),
+              widget.description,
+              style: TextStyle(),
             ),
           ],
         )),
