@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
         body: FutureBuilder(
           future: _getData(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
+            if (!snapshot.hasError) {
               return Container(
                 child: SmartRefresher(
                   controller: _refreshController,
@@ -78,7 +78,15 @@ class _HomeState extends State<Home> {
                       return Dismissible(
                         key: UniqueKey(),
                         onDismissed: (direction) async {
-                          await dbClass.deleteData(data, revIndex);
+                          if (!snapshot.hasError) {
+                            await dbClass.deleteData(data, revIndex);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please check yout connection'),
+                              ),
+                            );
+                          }
                         },
                         child: Card(
                           clipBehavior: Clip.antiAlias,
@@ -120,17 +128,17 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               );
-            } else if (snapshot.hasError) {
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
               return Center(
                 child: MaterialButton(
                     child: Text('Error/Click to refresh'),
                     onPressed: () {
                       setState(() {});
                     }),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
               );
             }
           },
@@ -170,11 +178,6 @@ class _HomeState extends State<Home> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          MaterialButton(
-                              onPressed: () {
-                                _datePicker(context);
-                              },
-                              child: Text('Pick date ')),
                           Center(
                             child: MaterialButton(
                               onPressed: () async {
@@ -213,23 +216,6 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  Future _datePicker(BuildContext context) async {
-    final currentDateTime = DateTime.now();
-    final date = await showDatePicker(
-      context: context,
-      initialDate: currentDateTime,
-      firstDate: currentDateTime,
-      lastDate: DateTime(2100, 19, 05, 1, 30),
-      confirmText: 'SET DATE',
-    );
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      confirmText: 'SET TIME',
-    );
-    print(date);
   }
 
   void _onrefresh() {

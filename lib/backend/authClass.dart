@@ -2,8 +2,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:supabase/supabase.dart';
 
-import '../main.dart';
-
 class AuthClass {
   final _client = Get.find<SupabaseClient>();
   final box = Get.find<GetStorage>();
