@@ -26,6 +26,8 @@ dependencies:
   get: ^4.3.8
   get_storage: ^2.0.3
   supabase: ^0.2.3
+  pull_to_refresh: ^2.0.0
+  form_field_validator: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.

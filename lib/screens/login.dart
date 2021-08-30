@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/backend/authClass.dart';
-import 'package:todo/screens/register.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 import 'home.dart';
 
@@ -12,6 +12,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
+  final key = GlobalKey<FormState>();
   AuthClass _authClass = new AuthClass();
   var loading = false;
   @override
@@ -42,6 +43,7 @@ class _LoginState extends State<Login> {
                   height: 25,
                 ),
                 Form(
+                  key: key,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
@@ -60,6 +62,14 @@ class _LoginState extends State<Login> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
+                                  validator: MultiValidator([
+                                    RequiredValidator(
+                                      errorText: 'Email is required',
+                                    ),
+                                    EmailValidator(
+                                      errorText: 'Please enter correct email',
+                                    ),
+                                  ]),
                                   controller: _emailController,
                                   decoration: InputDecoration(
                                       labelText: 'Email',
@@ -73,9 +83,11 @@ class _LoginState extends State<Login> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
+                                  validator: RequiredValidator(
+                                      errorText: 'Password is required'),
                                   controller: _passwordController,
                                   decoration: InputDecoration(
-                                      labelText: 'password',
+                                      labelText: 'Password',
                                       labelStyle:
                                           TextStyle(color: Colors.white)),
                                 ),
@@ -106,34 +118,39 @@ class _LoginState extends State<Login> {
                           setState(() {
                             loading = !loading;
                           });
-
-                          final authResp = await _authClass.login(
-                            _emailController.text,
-                            _passwordController.text,
-                          );
-
-                          if (authResp != null) {
-                            loading = !loading;
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Home();
-                                },
-                              ),
+                          if (key.currentState!.validate() == true) {
+                            final authResp = await _authClass.login(
+                              _emailController.text,
+                              _passwordController.text,
                             );
+
+                            if (authResp != null) {
+                              loading = !loading;
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Home();
+                                  },
+                                ),
+                              );
+                            } else {
+                              setState(() {
+                                loading = !loading;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Error',
+                                    style: TextStyle(fontFamily: 'prodsans'),
+                                  ),
+                                ),
+                              );
+                            }
                           } else {
                             setState(() {
                               loading = !loading;
                             });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Error',
-                                  style: TextStyle(fontFamily: 'prodsans'),
-                                ),
-                              ),
-                            );
                           }
                         },
                       )
