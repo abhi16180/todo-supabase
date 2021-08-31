@@ -78,15 +78,7 @@ class _HomeState extends State<Home> {
                       return Dismissible(
                         key: UniqueKey(),
                         onDismissed: (direction) async {
-                          if (!snapshot.hasError) {
-                            await dbClass.deleteData(data, revIndex);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Please check yout connection'),
-                              ),
-                            );
-                          }
+                          await dbClass.deleteData(data, revIndex);
                         },
                         child: Card(
                           clipBehavior: Clip.antiAlias,
